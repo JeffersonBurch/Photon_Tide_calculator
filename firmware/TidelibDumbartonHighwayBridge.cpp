@@ -16,8 +16,8 @@
  The predictions from this program should not be used for navigation
  and no accuracy or warranty is given or implied for these tide predictions.
  */
-#include <Time.h>
-#include <Math.h>
+#include <time.h>
+#include <math.h>
 #include "TidelibDumbartonHighwayBridge.h"
 
 unsigned int YearIndx = 0; // Used to index rows in the Equilarg/Nodefactor arrays
