@@ -19,7 +19,7 @@
  
 #ifndef  TidelibDumbartonHighwayBridge_h 
 #define  TidelibDumbartonHighwayBridge_h 
-#include <time.h>
+#include <spark_wiring_time.h>
 class TideCalc {
  public:
 	 TideCalc();
