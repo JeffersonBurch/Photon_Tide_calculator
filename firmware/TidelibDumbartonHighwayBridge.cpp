@@ -48,7 +48,7 @@ const long stationIDnumber = 9414509;
 const float Datum = 4.6818 ; // units in feet
 // Harmonic constant names: J1, K1, K2, L2, M1, M2, M3, M4, M6, M8, N2, 2N2, O1, OO1, P1, Q1, 2Q1, R2, S1, S2, S4, S6, T2, LDA2, MU2, NU2, RHO1, MK3, 2MK3, MN4, MS4, 2SM2, MF, MSF, MM, SA, SSA
 // These names match the NOAA names, except LDA2 here is LAM2 on NOAA's site
-typedef float PROGMEM prog_float_t; // Need to define this type before use
+typedef float prog_float_t; // Need to define this type before use
 // Amp is the amplitude of each of the harmonic constituents for this site
 const prog_float_t Amp[] = {0.056,1.378,0.236,0.19,0.046,3.038,0.023,0.059,0.056,0.01,0.591,0.069,0.81,0.039,0.449,0.148,0.03,0.007,0.072,0.65,0,0,0.033,0.039,0.069,0.138,0.039,0.105,0.151,0.03,0.043,0.026,0,0,0,0.125,0.128};
 // Kappa is the 'modified' or 'adapted' phase lag (Epoch) of each of the 
