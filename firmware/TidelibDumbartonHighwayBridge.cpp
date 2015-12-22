@@ -16,7 +16,6 @@
  The predictions from this program should not be used for navigation
  and no accuracy or warranty is given or implied for these tide predictions.
  */
-#include <time.h>
 #include <math.h>
 #include "TidelibDumbartonHighwayBridge.h"
 
