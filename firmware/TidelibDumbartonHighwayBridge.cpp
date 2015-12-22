@@ -124,7 +124,7 @@ float currAmp, currSpeed, currNodefactor, currEquilarg, currKappa, tideHeight;
 TideCalc::TideCalc(void){}
 
 // Return tide station name
-char* TideCalc::returnStationID(void){
+const char* TideCalc::returnStationID(void){
     return stationID;
 }
 
