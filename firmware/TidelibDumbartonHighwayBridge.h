@@ -27,7 +27,7 @@ class TideCalc {
     // the supplied date and time. The time should always be given in
     // the local standard time for the site, not daylight savings time
     // output units = feet
-    char* returnStationID(void); // NOAA station name
+    const char* returnStationID(void); // NOAA station name
     long returnStationIDnumber(void); // NOAA station ID number
 };
 #endif
