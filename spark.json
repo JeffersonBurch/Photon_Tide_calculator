@@ -1,0 +1,7 @@
+{
+    "name": "Photon_Tide_Calculator",
+    "version": "0.0.1",
+    "author": "Jeff Burch <Jefferson.Burch@gmail.com>",
+    "license": "GNU GENERAL PUBLIC LICENSE",
+    "description": "Port of Arduino Tide Calculator to the Particle Photon"
+}
