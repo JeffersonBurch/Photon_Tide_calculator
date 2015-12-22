@@ -19,7 +19,7 @@
  
 #ifndef  TidelibDumbartonHighwayBridge_h 
 #define  TidelibDumbartonHighwayBridge_h 
-#include <Time.h>
+#include <time.h>
 class TideCalc {
  public:
 	 TideCalc();
