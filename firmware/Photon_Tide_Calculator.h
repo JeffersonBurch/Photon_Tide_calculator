@@ -1,1 +1,1 @@
-#include "Photon_Tide_Calculator/TidelibDumbartonHighwayBridge/TidelibDumbartonHighwayBridge.h"
+#include "Photon_Tide_Calculator/TidelibDumbartonHighwayBridge.h"
