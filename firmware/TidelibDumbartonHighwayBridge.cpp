@@ -19,9 +19,9 @@
 #include <math.h>
 #include "TidelibDumbartonHighwayBridge.h"
 
-unsigned int YearIndx = 0; // Used to index rows in the Equilarg/Nodefactor arrays
-float currHours = 0;          // Elapsed hours since start of year
-const int adjustGMT = 8;     // Time zone adjustment to get time in GMT.
+static unsigned int YearIndx = 0; // Used to index rows in the Equilarg/Nodefactor arrays
+static float currHours = 0;          // Elapsed hours since start of year
+static const int adjustGMT = 8;     // Time zone adjustment to get time in GMT.
 //Make sure this is correct for the local standard time of the tide station.
 // 8 = Pacific Standard Time (America/Los_Angeles)
 /* Initialize harmonic constituent arrays. These each hold 37 values for
@@ -37,26 +37,26 @@ The Speed, Equilarg and Nodefactor arrays can all stay the same for any site.
 */
 
 // Selected station: Dumbarton Highway Bridge, San Francisco Bay, California
-const char stationID[] = "Dumbarton Highway Bridge, San Francisco Bay, California";
+static const char stationID[] = "Dumbarton Highway Bridge, San Francisco Bay, California";
 // Selection station ID number: 
-const long stationIDnumber = 9414509;
+static const long stationIDnumber = 9414509;
 // The 'datum' printed here is the difference between mean sea level and 
 // mean lower low water for the NOAA station. These two values can be 
 // found for NOAA tide reference stations on the tidesandcurrents.noaa.gov
 //  site under the datum page for each station.
-const float Datum = 4.6818 ; // units in feet
-const double DEG_TO_RAD = 0.017453292519943295;
+static const float Datum = 4.6818 ; // units in feet
+static const double DEG_TO_RAD = 0.017453292519943295;
 // Harmonic constant names: J1, K1, K2, L2, M1, M2, M3, M4, M6, M8, N2, 2N2, O1, OO1, P1, Q1, 2Q1, R2, S1, S2, S4, S6, T2, LDA2, MU2, NU2, RHO1, MK3, 2MK3, MN4, MS4, 2SM2, MF, MSF, MM, SA, SSA
 // These names match the NOAA names, except LDA2 here is LAM2 on NOAA's site
 typedef float prog_float_t; // Need to define this type before use
 // Amp is the amplitude of each of the harmonic constituents for this site
-const prog_float_t Amp[] = {0.056,1.378,0.236,0.19,0.046,3.038,0.023,0.059,0.056,0.01,0.591,0.069,0.81,0.039,0.449,0.148,0.03,0.007,0.072,0.65,0,0,0.033,0.039,0.069,0.138,0.039,0.105,0.151,0.03,0.043,0.026,0,0,0,0.125,0.128};
+static const prog_float_t Amp[] = {0.056,1.378,0.236,0.19,0.046,3.038,0.023,0.059,0.056,0.01,0.591,0.069,0.81,0.039,0.449,0.148,0.03,0.007,0.072,0.65,0,0,0.033,0.039,0.069,0.138,0.039,0.105,0.151,0.03,0.043,0.026,0,0,0,0.125,0.128};
 // Kappa is the 'modified' or 'adapted' phase lag (Epoch) of each of the 
 // harmonic constituents for this site.
-const prog_float_t Kappa[] = {281.9,244,244.6,237.1,272.4,246.7,354.4,10.2,49.9,105.8,225.6,199.6,228.9,283.2,240.8,228.1,215.9,264.9,218.3,264.2,0,0,249.3,212.2,25.7,226.8,215.5,95.6,80.6,356.7,23.3,75,0,0,0,221.4,286.9};
+static const prog_float_t Kappa[] = {281.9,244,244.6,237.1,272.4,246.7,354.4,10.2,49.9,105.8,225.6,199.6,228.9,283.2,240.8,228.1,215.9,264.9,218.3,264.2,0,0,249.3,212.2,25.7,226.8,215.5,95.6,80.6,356.7,23.3,75,0,0,0,221.4,286.9};
 // Speed is the frequency of the constituent, denoted as little 'a' by Hicks 2006
-const prog_float_t Speed[] = {15.58544,15.04107,30.08214,29.52848,14.49669,28.9841,43.47616,57.96821,86.95231,115.9364,28.43973,27.89535,13.94304,16.1391,14.95893,13.39866,12.85429,30.04107,15,30,60,90,29.95893,29.45563,27.96821,28.51258,13.47151,44.02517,42.92714,57.42383,58.9841,31.0159,1.098033,1.015896,0.5443747,0.0410686,0.0821373};
-const prog_float_t Equilarg[24][37] = { 
+static const prog_float_t Speed[] = {15.58544,15.04107,30.08214,29.52848,14.49669,28.9841,43.47616,57.96821,86.95231,115.9364,28.43973,27.89535,13.94304,16.1391,14.95893,13.39866,12.85429,30.04107,15,30,60,90,29.95893,29.45563,27.96821,28.51258,13.47151,44.02517,42.92714,57.42383,58.9841,31.0159,1.098033,1.015896,0.5443747,0.0410686,0.0821373};
+static const prog_float_t Equilarg[24][37] = { 
 {83.38,11.3,202.4,3.66,322.99,110.42,165.63,220.84,331.26,81.68,38.87,327.32,98.58,105.09,349.67,27.03,315.49,177.14,180,0,0,0,2.86,108.65,220.64,292.19,280.36,121.72,209.54,149.29,110.42,249.58,93.25,249.58,71.55,280.33,200.67},
 {166.42,7.56,195.61,182.09,211.44,210.46,135.69,60.92,271.39,121.85,50.19,249.92,204.31,348,349.9,44.04,243.77,176.88,180,0,0,0,3.12,19.21,61.44,221.71,215.56,218.02,53.36,260.65,210.46,149.54,341.84,149.54,160.27,280.1,200.19},
 {264.33,5.26,191.35,1.96,102.4,286.18,69.27,212.36,138.54,64.72,24.12,122.06,283.91,260.62,349.16,21.85,119.79,177.61,180,0,0,0,2.39,276.77,213.53,115.59,113.32,291.44,207.11,310.3,286.18,73.82,258.36,73.82,262.06,280.84,201.69},
@@ -83,7 +83,7 @@ const prog_float_t Equilarg[24][37] = {
 {28.3,1.86,183.78,319.33,338.46,119.15,358.73,238.3,357.45,116.61,88.59,58.03,121.41,54.07,349.24,90.85,60.29,177.16,180,0,0,0,2.84,147.34,240.4,270.96,273.22,121.01,236.44,207.74,119.15,240.85,56.33,240.85,30.56,280.76,201.52} 
  };
 
-const prog_float_t Nodefactor[24][37] = { 
+static const prog_float_t Nodefactor[24][37] = { 
 {0.8278,0.8824,0.7472,0.878,1.5575,1.0377,1.0571,1.0768,1.1173,1.1594,1.0377,1.0377,0.8068,0.4868,1,0.8068,0.8068,1,1,1,1,1,1,1.0377,1.0377,1.0377,0.8068,0.9156,0.9501,1.0768,1.0377,1.0377,0.6271,1.0377,1.1307,1,1},
 {0.8343,0.8864,0.7533,0.9704,1.4048,1.0367,1.0556,1.0747,1.1141,1.155,1.0367,1.0367,0.8135,0.5,1,0.8135,0.8135,1,1,1,1,1,1,1.0367,1.0367,1.0367,0.8135,0.9189,0.9526,1.0747,1.0367,1.0367,0.6381,1.0367,1.1272,1,1},
 {0.8669,0.9068,0.7865,1.1656,0.9653,1.0315,1.0477,1.0641,1.0977,1.1323,1.0315,1.0315,0.8475,0.5711,1,0.8475,0.8475,1,1,1,1,1,1,1.0315,1.0315,1.0315,0.8475,0.9354,0.965,1.0641,1.0315,1.0315,0.6961,1.0315,1.109,1,1},
@@ -112,13 +112,13 @@ const prog_float_t Nodefactor[24][37] = {
 
 // Define unix time values for the start of each year.
 //                                      2015       2016       2017       2018       2019       2020       2021       2022       2023       2024       2025       2026       2027       2028       2029       2030       2031       2032       2033       2034       2035       2036       2037       2038
-const unsigned long startSecs[] = {1420070400,1451606400,1483228800,1514764800,1546300800,1577836800,1609459200,1640995200,1672531200,1704067200,1735689600,1767225600,1798761600,1830297600,1861920000,1893456000,1924992000,1956528000,1988150400,2019686400,2051222400,2082758400,2114380800,2145916800};
+static const unsigned long startSecs[] = {1420070400,1451606400,1483228800,1514764800,1546300800,1577836800,1609459200,1640995200,1672531200,1704067200,1735689600,1767225600,1798761600,1830297600,1861920000,1893456000,1924992000,1956528000,1988150400,2019686400,2051222400,2082758400,2114380800,2145916800};
 
 // 1st year of data in the Equilarg/Nodefactor/startSecs arrays.
-const unsigned int startYear = 2015;
+static const unsigned int startYear = 2015;
 //------------------------------------------------------------------
 // Define some variables that will hold extract values from the arrays above
-float currAmp, currSpeed, currNodefactor, currEquilarg, currKappa, tideHeight;
+static float currAmp, currSpeed, currNodefactor, currEquilarg, currKappa, tideHeight;
 
 // Constructor function, doesn't do anything special
 TideCalc::TideCalc(void){}
